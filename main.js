@@ -2,6 +2,7 @@ const fieldSize = 800
 const numberOfCellsInRow = 50
 const framesPerSecond = 8
 
+/*
 const getRandomGrid = () => {
   const grid = new Array(numberOfCellsInRow)
   for (let i = 0; i < grid.length; i++) {
@@ -11,8 +12,53 @@ const getRandomGrid = () => {
     }
   }
   return grid
+}*/
+
+// My code inspired by him
+var canvas;
+var ctx;
+var gameGrid; 
+var numColumns;
+var numRows;
+var resolution = 20;
+
+function setUpGameGrid() {
+  numColumns = canvas.width / resolution;
+  numRows = canvas.height / resolution;
+  console.log(numColumns);
+  console.log(numRows);
+  gameGrid = generateArray(numColumns, numRows);
+  for (var i = 0; i < numColumns; i++) {
+    for(var j = 0; j < numRows; j++) {
+      gameGrid[i][j] = Math.floor(Math.random() * 2);
+    }
+  }
 }
 
+function generateArray(cols, rows) {
+  var tempArray = new Array(cols);
+  for(var i = 0; i < tempArray.length; i++) {
+    tempArray[i] = new Array(rows);
+  }
+  return tempArray;
+}
+
+function draw() {
+  ctx.fillStyle = "#4b2e83";
+  ctx.strokeStyle = "#85754d";
+  for (var i = 0; i < numColumns; i++) {
+    for(var j = 0; j < numRows; j++) {
+      var x = i * resolution;
+      var y = j * resolution;
+      if(gameGrid[i][j] === 1) {
+        ctx.fillRect(x, y, resolution, resolution);
+      }
+      ctx.strokeRect(x, y, resolution, resolution);
+    }
+  }
+}
+
+// END CODE
 const getNextGeneration = (grid) => {
   const nextGrid = new Array(grid.length)
   for (let i = 0; i < grid.length; i++) {
@@ -53,6 +99,7 @@ const countNeighbors = (grid, x, y) => {
 const cellStrokeColor = '#aaa'
 const cellSize = fieldSize / numberOfCellsInRow
 
+// DEPRECATED
 const drawGrid = (ctx, grid) => {
   ctx.strokeStyle = cellStrokeColor
   for (let i = 0; i < grid.length; i++) {
@@ -75,6 +122,7 @@ const drawGrid = (ctx, grid) => {
     }
   }
 }
+// END DEPRECATED
 
 const generation = (ctx, grid) => {
   ctx.clearRect(0, 0, fieldSize, fieldSize)
@@ -86,9 +134,19 @@ const generation = (ctx, grid) => {
 
 }
 
+/*
 window.onload = () => {
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
   const grid = getRandomGrid()
   generation(ctx, grid)
+}
+*/
+
+window.onload = function () {
+  canvas = document.getElementById("gameoflife");
+  ctx = canvas.getContext('2d');
+  setUpGameGrid();
+  draw();
+ // generation(ctx, gameGrid)
 }
