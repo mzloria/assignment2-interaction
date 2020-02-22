@@ -8,7 +8,15 @@
 </head>
 <body>
     <canvas id="gameoflife" width="800" height="500" style="border: 1px solid white; background: white"></canvas>
-    
-    <div>Game of Life Simulation. Allows click capability to toggle a cell dead or alive for one frame.</div> 
+    <div style="font-family: Calibri">
+    <div>Game of Life</div> 
+    <div>Allows click capability on grid to toggle a cell dead or alive for one frame. </div>
+    <div>Click one of the buttons below to restart Game of Life with the specified pattern. You can also toggle grid lines on/off. </div> 
+    <button type="button" onclick="randomRestart()">Random</button>
+    <button type="button" onclick="gliderRestart()">Gliders</button>
+    <button type="button" onclick="gosperGunRestart()">Gosper Gun</button>
+    <input type="checkbox" id="gridline" name="GridLine" value="On" onclick="toggleGridLine()">
+    <label for="gridline"> Grid Lines</label><br>
+    </div>
 </body>
 </html>
