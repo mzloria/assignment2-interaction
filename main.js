@@ -3,7 +3,7 @@ var ctx;
 var gameGrid; 
 var numColumns;
 var numRows;
-var resolution = 10;
+var resolution = 10; // Change this to adjust size of boxes.
 var framesPerSecond = 8;
 var random = true;
 var gosperGun = false;
