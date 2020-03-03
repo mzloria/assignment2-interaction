@@ -1,3 +1,12 @@
+// Michael Zachary Loria
+// March 3 2020
+// Assignment 3 - Updated with Database
+// Game of Life
+// This program simulates the Game of Life.
+// Allows user to select random, gliders, and gosper gun
+// states. Also allows user to save state to the database
+// and reload it. 
+
 var canvas;
 var ctx;
 var gameGrid; 
@@ -9,8 +18,29 @@ var random = true;
 var gosperGun = false;
 var gliders = false;
 var gridLines = true;
+var running = false;
 
 window.onload = function () {
+  var socket = io.connect("http://24.16.255.56:8888");
+
+  socket.on("load", function (data) {
+      gameGrid = data.data;
+      drawInitFrame();
+  });
+
+  var saveButton = document.getElementById("save");
+  var loadButton = document.getElementById("load");
+  
+  saveButton.onclick = function () {
+    console.log("Save completed.");
+    socket.emit("save", { studentname: "Michael Zachary Loria", statename: "aState", data: gameGrid });
+  };
+
+  loadButton.onclick = function () {
+    console.log("Load completed.");
+    socket.emit("load", { studentname: "Michael Zachary Loria", statename: "aState" });
+  };
+
   canvas = document.getElementById("gameoflife");
   ctx = canvas.getContext('2d');
   ctx.canvas.addEventListener("click", function (e) {
@@ -21,7 +51,8 @@ window.onload = function () {
     }
   }, false);
   setUpGameGrid();
-  drawFrame();
+  drawInitFrame();
+
 }
 
 function toggleGridLine() {
@@ -29,33 +60,57 @@ function toggleGridLine() {
 }
 
 function randomRestart() {
+  running = false;
   random = true;
   gosperGun = false;
   gliders = false;
   setUpGameGrid();
-  drawFrame();
+  drawInitFrame();
 }
 
 function gliderRestart() {
+  running = false;
   random = false;
   gosperGun = false;
   gliders = true;
   setUpGameGrid();
-  drawFrame();
+  drawInitFrame();
 }
 
 function gosperGunRestart() {
+  running = false;
   random = false;
   gosperGun = true;
   gliders = false;
   setUpGameGrid();
-  drawFrame();
+  drawInitFrame();
 }
 
-function drawFrame() {
+function drawInitFrame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#4b2e83";
+  ctx.strokeStyle = "#85754d";
+  for (var i = 0; i < numColumns; i++) {
+    for(var j = 0; j < numRows; j++) {
+      var x = i * resolution;
+      var y = j * resolution;
+      if(gameGrid[i][j] === 1) {
+        ctx.fillRect(x, y, resolution, resolution);
+      }
+      if(gridLines) {
+        ctx.strokeRect(x, y, resolution, resolution);
+      }
+    }
+  }
+}
+
+function drawContFrame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  updateGen();
   draw();
-  setTimeout(() => {requestAnimationFrame(() => drawFrame())}, 1000 / framesPerSecond);
+  if(running) {
+    setTimeout(() => {requestAnimationFrame(() => drawContFrame())}, 1000 / framesPerSecond);
+  }
 }
 
 function setUpGameGrid() {
@@ -121,7 +176,9 @@ function draw() {
       }
     }
   }
+}
 
+function updateGen() {
   var nextGeneration = generateArray(numColumns, numRows);
   for (var i = 0; i < numColumns; i++) {
     for(var j = 0; j < numRows; j++) {
@@ -200,4 +257,13 @@ function addGliderGun(x, y) {
   gameGrid[x+8][y+16] = 1;
   gameGrid[x+9][y+13] = 1;
   gameGrid[x+9][y+14] = 1;
+}
+
+function startAnimation() {
+  running = true;
+  drawContFrame();
+}
+
+function stopAnimation() {
+  running = false;
 }

@@ -4,19 +4,25 @@
 <head>
     <meta charset="utf-8">
     <title>Game of Life</title>
+    <script type="text/javascript" src="http://24.16.255.56:8888/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </head>
 <body>
     <canvas id="gameoflife" width="800" height="500" style="border: 1px solid white; background: white"></canvas>
     <div style="font-family: Calibri">
-    <div>Game of Life</div> 
-    <div>Allows click capability on grid to toggle a cell dead or alive for one frame. </div>
-    <div>Click one of the buttons below to restart Game of Life with the specified pattern. You can also toggle grid lines on/off. </div> 
+    <div>Game of Life: When animation is running, grid allows click capability to toggle a cell dead or alive for one frame. </div>
+    <div>Click "Start" to start animation, and click "Stop" to stop the animation. Click one of the patterns below</div>
+    <div>to restart Game of Life with the specified pattern. Grid lines can be toggled on/off after the animation has </div> 
+    <div>started. Click the "Save" button to save the state of the board, and "Load" to load the state back onto the board.</div>
     <button type="button" onclick="randomRestart()">Random</button>
     <button type="button" onclick="gliderRestart()">Gliders</button>
-    <button type="button" onclick="gosperGunRestart()">Gosper Gun</button>
+    <button type="button" onclick="gosperGunRestart()">Gosper Gun</button> ||
+    <button type="button" onclick="startAnimation()">Start</button> 
+    <button type="button" onclick="stopAnimation()">Stop</button> ||
+    <button id="save" type="button">Save</button>
+    <button id="load" type="button">Load</button> || 
     <input type="checkbox" id="gridline" name="GridLine" value="On" onclick="toggleGridLine()" checked>
-    <label for="gridline"> Grid Lines</label><br>
+    <label for="gridline"> Grid Lines</label>
     </div>
 </body>
 </html>
