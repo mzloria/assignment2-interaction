@@ -33,12 +33,12 @@ window.onload = function () {
   
   saveButton.onclick = function () {
     console.log("Save completed.");
-    socket.emit("save", { studentname: "Michael Zachary Loria", statename: "aState", data: gameGrid });
+    socket.emit("save", { studentname: "Michael Zachary Loria", statename: "gameGrid", data: gameGrid });
   };
 
   loadButton.onclick = function () {
     console.log("Load completed.");
-    socket.emit("load", { studentname: "Michael Zachary Loria", statename: "aState" });
+    socket.emit("load", { studentname: "Michael Zachary Loria", statename: "gameGrid" });
   };
 
   canvas = document.getElementById("gameoflife");
